@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Angle Selector with React</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            width: 350px;
+        }
+        .container input[type="number"] {
+            width: 60px;
+            padding: 5px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            text-align: center;
+            font-size: 16px;
+        }
+        .slider {
+            width: 100%;
+            margin-bottom: 20px;
+        }
+        .slider::-webkit-slider-thumb {
+            background-color: #007bff;
+            border: 1px solid #007bff;
+            border-radius: 50%;
+            cursor: pointer;
+            height: 20px;
+            width: 20px;
+        }
+        .slider::-moz-range-thumb {
+            background-color: #007bff;
+            border: 1px solid #007bff;
+            border-radius: 50%;
+            cursor: pointer;
+            height: 20px;
+            width: 20px;
+        }
+        .radio-buttons {
+            display: flex;
+            justify-content: space-around;
+            gap: 10px;
+        }
+        .radio-buttons label {
+            font-size: 16px;
+            cursor: pointer;
+            color: #333;
+        }
+        .radio-buttons input[type="radio"] {
+            margin-right: 5px;
+            cursor: pointer;
+        }
+        .radio-buttons input[type="radio"]:checked + label {
+            color: #007bff;
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <!-- React and ReactDOM from CDN -->
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+
+    <!-- Babel for JSX transformation -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+    <script type="text/babel">
+        const { useState } = React;
+
+        function AngleSelector() {
+            const [angle, setAngle] = useState(0);
+
+            const updateAngle = (value) => {
+                const boundedValue = (value % 360 + 360) % 360; // Ensure the value is between 0 and 360
+                setAngle(boundedValue);
+            };
+
+            return (
+                <div className="container">
+                    <h2>Angle Selector</h2>
+                    <input
+                        type="number"
+                        value={angle}
+                        onChange={(e) => updateAngle(parseInt(e.target.value))}
+                        min="0"
+                        max="360"
+                    />
+                    <input
+                        type="range"
+                        className="slider"
+                        min="0"
+                        max="360"
+                        value={angle}
+                        onChange={(e) => updateAngle(parseInt(e.target.value))}
+                    />
+                    <div className="radio-buttons">
+                        {[0, 45, 60, 90, 180].map((val) => (
+                            <label key={val}>
+                                <input
+                                    type="radio"
+                                    name="preset"
+                                    value={val}
+                                    checked={angle === val}
+                                    onChange={() => updateAngle(val)}
+                                />
+                                {val}
+                            </label>
+                        ))}
+                    </div>
+                </div>
+            );
+        }
+
+        // Render the component to the DOM
+        const rootElement = document.getElementById('root');
+        ReactDOM.createRoot(rootElement).render(<AngleSelector />);
+    </script>
+</body>
+</html>
